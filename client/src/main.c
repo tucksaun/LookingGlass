@@ -651,7 +651,7 @@ void spiceClipboardRequest(const SpiceDataType type)
 
 int eventFilter(void * userdata, SDL_Event * event)
 {
-  static bool serverMode   = false;
+  bool serverMode = params.serverMode;
   static bool realignGuest = true;
 
   switch(event->type)

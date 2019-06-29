@@ -103,6 +103,7 @@ struct AppParams
   bool         clipboardToLocal;
   bool         scaleMouseInput;
   bool         hideMouse;
+  bool         serverMode;
   bool         ignoreQuit;
   bool         noScreensaver;
   bool         grabKeyboard;
