@@ -38,6 +38,9 @@ static bool       optSizeParse           (struct Option * opt, const char * str)
 static StringList optSizeValues          (struct Option * opt);
 static char *     optSizeToString        (struct Option * opt);
 static char *     optScancodeToString    (struct Option * opt);
+static bool       optMouseModeParse      (struct Option * opt, const char * str);
+static StringList optMouseModeValues     (struct Option * opt);
+static char *     optMouseModeToString   (struct Option * opt);
 
 static void doLicense();
 
@@ -318,6 +321,15 @@ static struct Option options[] =
     .type           = OPTION_TYPE_BOOL,
     .value.x_bool   = true
   },
+  {
+    .module         = "spice",
+    .name           = "mouseMode",
+    .description    = "Switch SPICE mouse mode to client or server",
+    .type          = OPTION_TYPE_CUSTOM,
+    .parser        = optMouseModeParse,
+    .getValues     = optMouseModeValues,
+    .toString      = optMouseModeToString
+  },
   {0}
 };
 
@@ -568,4 +580,34 @@ static char * optScancodeToString(struct Option * opt)
   char * str;
   alloc_sprintf(&str, "%d = %s", opt->value.x_int, SDL_GetScancodeName(opt->value.x_int));
   return str;
+}
+
+static bool optMouseModeParse(struct Option * opt, const char * str)
+{
+  if (strcasecmp(str, "client") == 0)
+  {
+    params.serverMode = false;
+    return true;
+  } else if (strcasecmp(str, "server") == 0)
+  {
+    params.serverMode = true;
+    return true;
+  }
+
+  return false;
+}
+
+static StringList optMouseModeValues(struct Option * opt)
+{
+  StringList sl = stringlist_new(false);
+
+  stringlist_push(sl, "client");
+  stringlist_push(sl, "server");
+
+  return sl;
+}
+
+static char * optMouseModeToString(struct Option * opt)
+{
+  return strdup(params.serverMode ? "server" : "client");
 }

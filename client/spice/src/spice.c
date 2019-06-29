@@ -17,7 +17,7 @@ this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "spice/spice.h"
+#include "../../src/main.h"
 #include "utils.h"
 #include "common/debug.h"
 
@@ -463,7 +463,8 @@ bool spice_on_main_channel_read()
       return false;
     }
 
-    if (msg.current_mouse_mode != SPICE_MOUSE_MODE_CLIENT && !spice_mouse_mode(false))
+    DEBUG_INFO("Initial server mode: %s", params.serverMode ? "server" : "client");
+    if (!spice_mouse_mode(params.serverMode))
     {
       DEBUG_ERROR("failed to set mouse mode");
       return false;
